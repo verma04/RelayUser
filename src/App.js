@@ -28,7 +28,7 @@ import { GoogleFonts } from "next-google-fonts";
 import Dashborad from './components/Dashboard/Dashboard'
 import Users from './components/Users/Users'
 import Relay from './components/ReplayProfile/Relay'
-
+import BottomNavigator from './components/bottomNavigation/bottom'
   function App() {
   if (localStorage.jwtToken) {
     // Set auth token header auth
@@ -64,7 +64,7 @@ import Relay from './components/ReplayProfile/Relay'
        <Hydrate>
        <Router>
        <Switch>
-
+     
        <PrivteRoute  exact path="/" component={Dashborad} />
        <PrivteRoute  exact path="/" component={Dashborad} />
        <Route exact path="/login" component={Login} />
