@@ -24,7 +24,7 @@ export const registerUser = (userData, Router) => dispatch => {
 // Login - get user token
 export const loginUser = userData => dispatch => {
   
-    axios.post("http://telltale.airjaldi.net:5000/api/relaylogin", userData)
+    axios.post("/api/relaylogin", userData)
     .then(res => {
       // Save to localStorage
 

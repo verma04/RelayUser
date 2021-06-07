@@ -73,7 +73,7 @@ function Dash({}) {
   let history = useHistory();
 const params = useParams()
   
-    const { data, status  , isFetching } = useQuery('relaylist', () =>
+    const { data, status  , isFetching } = useQuery('/relaylist', () =>
     api('/relaylist'),
     {
        

@@ -511,6 +511,7 @@ height: 30%;
 
       }
 
+
       .modal {
  /* Hidden by default */
   position: fixed; /* Stay in place */
@@ -558,6 +559,11 @@ height: 30%;
          
     }
   }
+  }
+
+  .comment {
+    width: 100%;
+    height: 30rem;;
   }
   
 }

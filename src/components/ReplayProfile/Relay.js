@@ -83,7 +83,7 @@ const params = useParams()
     const { data, status  , isFetching } = useQuery(["Stories" , params.id ], fetchNews ,
     {
        
-        refetchInterval: 500,
+        refetchInterval: 5000,
       }
     
     );
@@ -188,8 +188,8 @@ const params = useParams()
 
 
 )}
-<Comment/>
-  </Section >
+<Comment  network={params.id} relay={params.relay}  />
+  </Section  >
 
         
    

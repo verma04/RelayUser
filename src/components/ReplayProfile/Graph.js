@@ -51,7 +51,7 @@ const  result = data.filter(d => {var time = d.reading_time
       
      });
 
-     console.log(result)
+  
       const final = result.map(t => ({ UpperVoltageThreshold: relayData[0].UpperVoltageThreshold , LowerVoltageThreshold: relayData[0].LowerVoltageThreshold , voltage: t.voltage, reading_time:t.reading_time}))
 
 
