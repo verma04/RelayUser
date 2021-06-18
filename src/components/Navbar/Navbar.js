@@ -164,7 +164,7 @@ function Navbar({logoutUser  }) {
   
 
               
-        <i  onClick={() => logoutUser() } className="fas fa-sign-out-alt"></i> 
+        {/* <i  onClick={() => logoutUser() } className="fas fa-sign-out-alt"></i>  */}
 
 
 
