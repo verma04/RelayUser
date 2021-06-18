@@ -13,6 +13,7 @@ import {
     Line,
     ComposedChart,
     Area,
+    ResponsiveContainer,
     Bar
   } from "recharts";
   import DatePicker from "react-datepicker";
@@ -57,7 +58,7 @@ const  result = data.filter(d => {var time = d.reading_time
 
 return (
        
-<Section>
+<Section  >
              <div     style={{display:'flex' , flexDirection:'column' , justifyContent:"center", width:"100%"}} >
              <div class='picker' >
      
@@ -84,15 +85,15 @@ return (
        {result.length === 0
   ? (
 <div  className="notFound" >
-<h2>No Record Found</h2>
+<h2>Graph not available for current date range. Please choose a different range</h2>
     </div>
   ):
   (
+    <ResponsiveContainer width="100%" height={400}>
     <LineChart
 
       
-    width={1300}
-    height={400}
+    
     data={final.reverse()}
     margin={{ top: 5,  right: 30, left: 20, bottom: 5 }}
   >
@@ -100,8 +101,8 @@ return (
     <XAxis dataKey="reading_time" />
     <YAxis 
        
-       ticks={[8 , 12, 13,  16]}
-       domain={[8, 16]}
+       ticks={[  relayData[0].LowerVoltageThreshold / 1.5   , relayData[0].LowerVoltageThreshold, relayData[0].UpperVoltageThreshold , relayData[0].UpperVoltageThreshold + 2.5]}
+       domain={[ relayData[0].LowerVoltageThreshold / 1.5 ,  relayData[0].UpperVoltageThreshold + 2.5]}
 
     
     />
@@ -111,7 +112,7 @@ return (
     <Line type="monotone" dot={false} dataKey="LowerVoltageThreshold" stroke="red" />
     <Line type="monotone" dot={false} dataKey="UpperVoltageThreshold" stroke="#82ca9d" />
   </LineChart>
-
+</ResponsiveContainer>
 
   )
 

@@ -37,7 +37,7 @@ function Login({loginUser , auth:{isAuthenticated}}) {
                     </div>
                     <div className="login-form" >
   <div className="head" >
-      <h2>Login</h2>
+      <h2> Relay User Login</h2>
      
           
            </div>

@@ -6,7 +6,12 @@ import { Section } from './components/comman/Style'
 import Network from './components/Network/Network'
 import { Provider } from "react-redux";
 import store from "./redux/store";
-import { setCurrentUser , sessionExpire } from './redux/actions/authActions';
+import PrivteRoute from './components/private-route/PrivateRoute'
+  import Profile from './components/NetworkProfile/Profile'
+import Dashborad from './components/Dashboard/Dashboard'
+import Users from './components/Users/Users'
+import Relay from './components/ReplayProfile/Relay'
+
 import React, { Fragment, useEffect } from 'react';
 import { ThemeProvider } from "styled-components";
 import { GoogleFonts } from "next-google-fonts";
@@ -22,35 +27,31 @@ import { GoogleFonts } from "next-google-fonts";
  import jwt_decode from "jwt-decode";
   import Dash from './components/Dash'
   import Login from './components/Auth/Login'
-  import UserLogin from './User/Auth/Login'
-  import PrivteRoute from './components/private-route/PrivateRoute'
-  import Profile from './components/NetworkProfile/Profile'
-import Dashborad from './components/Dashboard/Dashboard'
-import Users from './components/Users/Users'
-import Relay from './components/ReplayProfile/Relay'
-import BottomNavigator from './components/bottomNavigation/bottom'
-  function App() {
-  if (localStorage.jwtToken) {
-    // Set auth token header auth
-    if (localStorage.jwtToken) {
-    const token = localStorage.getItem("jwtToken");
-    setAuthToken(token);
-    // Decode token and get user info and exp
-    const decoded = jwt_decode(token);
-    // Set user and isAuthenticated
-    store.dispatch(setCurrentUser(decoded));
-    // Check for expired token
-    const currentTime = Date.now() / 1000; // to get in 
-    if (decoded.exp < currentTime) {
-      // Logout user
-      store.dispatch(sessionExpire());
+  import { setCurrentUser , sessionExpire } from './redux/actions/authActions';;
   
-      // Redirect to login
-      window.location.href = "./login";
-    }
-  }
 
-  }
+  function App() {
+    if (localStorage.jwtToken) {
+      // Set auth token header auth
+      if (localStorage.jwtToken) {
+      const token = localStorage.getItem("jwtToken");
+      setAuthToken(token);
+      // Decode token and get user info and exp
+      const decoded = jwt_decode(token);
+      // Set user and isAuthenticated
+      store.dispatch(setCurrentUser(decoded));
+      // Check for expired token
+      const currentTime = Date.now() / 1000; // to get in 
+      if (decoded.exp < currentTime) {
+        // Logout user
+        store.dispatch(sessionExpire());
+    
+        // Redirect to login
+        window.location.href = "./login";
+      }
+    }
+  
+    };
   const queryClient = new QueryClient();
   return (
  <>
@@ -68,7 +69,7 @@ import BottomNavigator from './components/bottomNavigation/bottom'
        <PrivteRoute  exact path="/" component={Dashborad} />
        <PrivteRoute  exact path="/" component={Dashborad} />
        <Route exact path="/login" component={Login} />
-       <Route exact path="/Userlogin" component={UserLogin} />
+     
        <PrivteRoute  exact path="/network" component={Profile} />
        <PrivteRoute  exact path="/network/:id/:relay" component={Relay} />
        <PrivteRoute  exact path="/users" component={Users} />

@@ -13,30 +13,19 @@ function Bottom() {
         <Fixed>
             <div className="flex" >
            <div  onClick={()  => router.push({
-    pathname: '/dashboard',
+    pathname: '/',
 }) }  id={splitLocation[1] === "" ? "active" : ""}  className="flex-1" >
            <i class="fas fa-signal"></i>
            <span>Home</span>
            </div>
            <div onClick={()  => router.push({
-    pathname: '/services',
+    pathname: '/network',
 }) }  id={splitLocation[1] === "network" ? "active" : ""}  className="flex-1" >
            <i class="fas fa-network-wired"></i>
            <span>network</span>
            </div>
         
-           <div onClick={()  => router.push({
-    pathname: '/',
-}) }  id={router.pathname == "/" ? "active" : ""}  className="flex-1" >
-           <i class="fas fa-cog"></i>
-           <span>Settings</span>
-           </div>
-           <div onClick={()  => router.push({
-    pathname: '/alert',
-}) }  id={router.pathname == "/alert" ? "active" : ""} className="flex-1" >
-       <i class="fas fa-exclamation-triangle"></i>
-           <span>Alert</span>
-           </div>
+       
             </div>
         </Fixed>
     )

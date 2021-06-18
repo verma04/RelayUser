@@ -6,8 +6,8 @@ import { Section} from './Style'
 import { useParams } from 'react-router-dom';
 import Notifications from './Notifications'
 import moment from 'moment'
-import Comment from './Comment'
 
+import Comment from './Comment'
 
 import {
   LineChart,
@@ -72,22 +72,61 @@ const data = [
 const fetchNews = async (id) => {
 
     const idd = id.queryKey[1]
+ 
    
-    const res = await fetch(`/api/getNetworkProfile/${idd}`);
+    const res = await fetch(`/api/getNetworkProfile/${idd.id}/${idd.relay}`);
+    return res.json();
+  };
+  const relayGraph = async (id) => {
+
+    const idd = id.queryKey[1]
+ 
+   
+    const res = await fetch(`/api/relayGraph/${idd.relay}`);
     return res.json();
   };
 function Dash({}) {
   let history = useHistory();
 const params = useParams()
   
-    const { data, status  , isFetching } = useQuery(["Stories" , params.id ], fetchNews ,
+    const { data, status  , isFetching } = useQuery(["RelyProfile" , params ], fetchNews ,
     {
        
-        refetchInterval: 5000,
+        refetchInterval: 1000,
       }
     
     );
+
+    const { data:data1, status:status1  } = useQuery(["relayGraph" , params ], relayGraph ,
+    {
+       
+        refetchInterval: 1000,
+      }
+    
+    );
+
+    const sub = ( one , zero , lower) => {
+      const avg =  one - zero
+      const avg1 = zero-(lower -1)
+
+    const   set =  (avg1/avg)
+
+    var hours = Math.trunc(set/60);
+    var minutes = set % 60;
+    // console.log(hours +":"+ minutes);
+
+    return (
+      <div style={{marginTop:"2rem", fontFamily:"Montserrat-Bold" , color:"Orange"}} >
+    Battery Will Die in :  {parseFloat(hours)}:Hours
+      &nbsp;
+        {minutes.toFixed(0)}:Minutes
+      </div>
+    )
+
+      // var newDateObj = moment(oldDateObj).add(30, 'm').toDate();
+    }
  
+
     return (
         <>
         {status === "error" && <p>Error fetching data</p>}
@@ -99,100 +138,157 @@ const params = useParams()
         {status === "success" && (
 
    <>
-   <Section>
+   {((data.sensors.filter(sets => sets.location === params.relay)).length === 0)
+   ? 
+   (
+     <div>
+
+       <h1  style={{ marginTop:"10rem", fontFamily:"Montserrat-Bold"}} >Relay Not Found in Sensor DataBase List</h1>
+     </div>
+   )
+   :
+   (
+     <Section>
 <div className="flex" >
           
 
-{data.data.relayNetwork.filter(sets => sets.relayNetworkName === params.relay).map(number =>
-
-<div className="flex-1" >
-
-    <div className="top" >
-
-<div className="left" >
-<div className="left-top" >
-<i class="fas fa-broadcast-tower"></i>
-
-<li><span>Relay Name</span><span>{params.relay}</span></li>
-
-</div>
-<div className="left-bottom" >
-
-<li><h4>Current Voltage</h4><span>{data.sensors.filter(sets => sets.location === number.relayNetworkName)[0].voltage}</span></li>
-<li><h4>Ampere</h4><span> {data.sensors.filter(sets => sets.location === number.relayNetworkName)[0].batteryampere} </span></li>
-</div>
-    </div> 
-    <div className="right" >
-
-<div  style={{marginTop:"1rem"}} >
-    <ReactSpeedometer
-    maxValue={16}
-    value={data.sensors.filter(sets => sets.location === number.relayNetworkName)[0].voltage}
-    valueFormat={'d'}
-    customSegmentStops={[ 0 ,10 , 12 ,  14 ,  16]}
-    style={{marginTop:"1rem" ,}}
-    textColor={"red"}
-    width={200}
-    height={110}
-
-    segmentColors={[
-        "#bf616a",
-        "#d08770",
-        "#ebcb8b",
-        "#a3be8c",
-        "#b48ead",
-      ]}
-    
-  
-  />
- 
-  {moment(data.sensors.filter(sets => sets.location === number.relayNetworkName)[0].reading_time).format("dddd, MMMM Do YYYY, h:mm:ss a")}
-
-
-  </div>
-</div> 
-
-
-    </div>
-
-  
-
-</div>
-
-
-
-
-
-
-)}
-
-<div className="flex-2" >
-
-<Notifications id={params.relay}/>
-
-
-</div>
- 
-
-
-
-
-  </div>
-
-  {data.data.relayNetwork.filter(sets => sets.relayNetworkName === params.relay).map(number =>
-
-
-<Graph  relayData={data.data.relayNetwork.filter(sets => sets.relayNetworkName === params.relay)} data={data.sensors.filter(sets => sets.location === number.relayNetworkName)} />
-
-
-
-
-)}
-<Comment  network={params.id} relay={params.relay}  />
-  </Section  >
-
+          {data.data.relayNetwork.filter(sets => sets.relayNetworkName === params.relay).map(number =>
+          
+          <div className="flex-1" >
+          
+              <div className="top" >
+          
+          <div className="left" >
+          <div className="left-top" >
+          <i class="fas fa-broadcast-tower"></i>
+          
+          <li><span>Relay Name</span><span>{params.relay}</span></li>
+          
+          </div>
+          <div className="left-bottom" >
+          
+          <li><h4>Current Voltage</h4><span>{ parseFloat(data.sensors.filter(sets => sets.location === number.relayNetworkName)[0].voltage).toFixed(1)}</span></li>
+          <li><h4>Ampere</h4><span> {data.sensors.filter(sets => sets.location === number.relayNetworkName)[0].batteryampere} </span></li>
+          </div>
+              </div> 
+              <div className="right" >
+          
+          <div  style={{marginTop:"1rem"}} >
+              <ReactSpeedometer
+              maxValue={data.data.relayNetwork.filter(sets => sets.relayNetworkName === params.relay)[0].UpperVoltageThreshold + 2.5}
+              value={data.sensors.filter(sets => sets.location === number.relayNetworkName)[0].voltage}
+              valueFormat={'d'}
+              customSegmentStops={[ 0 ,data.data.relayNetwork.filter(sets => sets.relayNetworkName === params.relay)[0].LowerVoltageThreshold / 1.5  ,   data.data.relayNetwork.filter(sets => sets.relayNetworkName === params.relay)[0].LowerVoltageThreshold ,  data.data.relayNetwork.filter(sets => sets.relayNetworkName === params.relay)[0].UpperVoltageThreshold ,  data.data.relayNetwork.filter(sets => sets.relayNetworkName === params.relay)[0].UpperVoltageThreshold + 2.5]}
+              style={{marginTop:"1rem" ,}}
+              textColor={"red"}
+              width={200}
+              height={110}
+          
+              segmentColors={[
+                  "#bf616a",
+                  "#d08770",
+                  "#ebcb8b",
+                  "#a3be8c",
+                  "#b48ead",
+                ]}
+              
+            
+            />
+           
+           
+          
+          
+            </div>
+            <span>{moment(data.sensors.filter(sets => sets.location === number.relayNetworkName)[0].reading_time).format("dddd, MMMM Do YYYY, h:mm:ss a")}</span> 
+          
+          
+          
+            
+          
+            {(() => {
+                  if (data.sensors.filter(sets => sets.location === number.relayNetworkName)[0].voltage < data.sensors.filter(sets => sets.location === number.relayNetworkName)[1].voltage) {
+                       return (
+                    sub(data.sensors.filter(sets => sets.location === number.relayNetworkName)[1].voltage , data.sensors.filter(sets => sets.location === number.relayNetworkName)[0].voltage ,  data.data.relayNetwork.filter(sets => sets.relayNetworkName === params.relay)[0].LowerVoltageThreshold)
+                       )
+                  }  else {
+                    return (
+                     null
+                    )
+                  }
+                })()}
+          
+          
+          
+          </div> 
+          
+          
+              </div>
+          
+            
+          
+          </div>
+          
+          
+          
+          
+          
+          
+          )}
+          
+          <div className="flex-2" >
+          
+          <Notifications id={params.relay}/>
+          
+          
+          </div>
+           
+          
+          
+          
+          
+            </div>
+          
+            {data.data.relayNetwork.filter(sets => sets.relayNetworkName === params.relay).map(number =>
+          <>
+            {status1 === "error" && <p>Error fetching data</p>}
+        {status1 === "loading" && 
         
+ <div className="loading"  >
    
+   <img src="https://res.cloudinary.com/dzcmadjl1/image/upload/v1615785167/cm5bk5luzcwquerawyfc.gif" ></img>
+ 
+ </div>
+        
+        }
+        {status1 === "success" && (
+
+   <>
+          <Graph  relayData={data.data.relayNetwork.filter(sets => sets.relayNetworkName === params.relay)} data={data1} />
+          
+          </>
+        )}
+          
+          </>
+          )}
+          
+          
+          
+          <Comment  network={params.id} relay={params.relay}  />
+          
+         
+           
+           
+           </Section >
+   )
+   
+   
+
+   }
+   
+ 
+
+
+ 
   </>
        )}
       
@@ -203,11 +299,7 @@ const params = useParams()
     
     
     </>
-   
-   
-   
-   
-   )
+    )
 }
 
 export default Dash

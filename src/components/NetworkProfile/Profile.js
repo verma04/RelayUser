@@ -83,7 +83,7 @@ const params = useParams()
     console.log(data)
     return (
     
-        <div>
+        <>
         {status === "error" && <p>Error fetching data</p>}
         {status === "loading" && 
         
@@ -99,9 +99,7 @@ const params = useParams()
 
 <div className="top" >
 
-    <div className="head" >
-        <h2>sddds</h2>
-    </div>
+  
 
   
 </div>
@@ -138,10 +136,11 @@ const params = useParams()
     value={number.voltage}
     valueFormat={'d'}
     customSegmentStops={[ 0 ,10 , 12 ,  14 ,  16]}
+   
     style={{marginTop:"1rem" ,}}
     textColor={"red"}
     width={200}
-    height={200}
+    height={125}
     segmentColors={[
       "#bf616a",
       "#d08770",
@@ -186,7 +185,7 @@ const params = useParams()
   
     
     
-    </div>
+    </>
    
    
    )

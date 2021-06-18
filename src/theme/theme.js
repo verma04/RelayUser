@@ -28,7 +28,7 @@ button {
     
     }
   body {
-    color: #2f3435; 
+    
   font-family:  Montserrat-Regular;
 
       overflow-x: hidden;

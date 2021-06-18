@@ -20,14 +20,17 @@ export const Fixed = styled.div`
   
 }
 
-@media  (max-width: 600px) {
- 
+@media  (max-width:767px) {
+ span {
+     text-transform: uppercase;
+ }
     position: fixed;
     width: 100%;
     bottom: 1rem;
     /* height: 2rem; */
     display: flex;
     justify-content: center;
+    z-index: 990;
  .flex {
     display: flex;
    
@@ -37,14 +40,14 @@ export const Fixed = styled.div`
     height: 4rem;
     width: 90%;
     border-radius: 2rem;
-    background: black;
+    background:#0085C5;
     .flex-1 {
         width:25%;
      
          display:flex;
          justify-content:center;
          flex-direction:column;
-         color: #787878;
+         color: #87CEFA;
          align-items: center;
          cursor: pointer;
          span {
